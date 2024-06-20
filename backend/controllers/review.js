@@ -2,7 +2,9 @@ import { db } from "../connect.js";
 import jwt from "jsonwebtoken";
 
 export const getReviews = (req, res) => {
-  const q = "SELECT * FROM reviews WHERE idannounce = ?";
+  // const q = "SELECT * FROM reviews WHERE idannounces = ?";
+  const q =
+    "SELECT reviews.*, users.username, users.userphoto FROM reviews INNER JOIN users ON reviews.idusers = users.idusers WHERE reviews.idannounces = ?";
   db.query(q, [req.query.idannounce], (err, data) => {
     if (err) {
       return res.status(500).json(err);
@@ -26,7 +28,7 @@ export const createReview = (req, res) => {
       userInfo.id, // get the user id from the user that is currently logged in
     ];
     const q =
-      "INSERT INTO reviews(rating, review, idannounce, iduser) VALUES (?)";
+      "INSERT INTO reviews(rating, review, idannounces, iduser) VALUES (?)";
     db.query(q, [values], (err, data) => {
       if (err) {
         return res.status(500).json(err);

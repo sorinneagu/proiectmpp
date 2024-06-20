@@ -2,16 +2,19 @@ import React, { useEffect } from "react";
 import "./card.css";
 import Rating from "@mui/material/Rating";
 import Box from "@mui/material/Box";
-import placeholder from "../../assets/placeholder.jpg";
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Card = () => {
+  const navigate = useNavigate();
+
   const [card, setCard] = useState([]);
   useEffect(() => {
-    const fetchAllCards = async () => {
+    const fetchAllCards = async (e) => {
       try {
-        const response = await axios.get("http://localhost:5000/announces");
+        // e.preventDefault();
+        const response = await axios.get("http://localhost:5000/api/announces");
         setCard(response.data);
       } catch (error) {
         console.log(error);
@@ -22,7 +25,11 @@ const Card = () => {
   return (
     <div className="card">
       {card.map((announce) => (
-        <div key={announce.idannounces} className="card-item">
+        <div
+          key={announce.idannounces}
+          className="card-item"
+          onClick={() => navigate("/announce/" + announce.idannounces)}
+        >
           <div className="card-item-header">
             <img draggable="false" src={announce.images} alt="Announcement" />
           </div>

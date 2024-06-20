@@ -35,13 +35,12 @@ export const createAnnounce = (req, res) => {
     const values = [
       req.body.title,
       req.body.price,
-      req.body.rating,
       req.body.description,
       userInfo.id,
     ];
 
     const q =
-      "INSERT INTO announces (title, price, rating, description, iduser) VALUES (?, ?, ?, ?, ?)";
+      "INSERT INTO announces (title, price, description, idusers) VALUES (?, ?, ?, ?)";
     db.query(q, values, (err, data) => {
       if (err) {
         return res.status(500).json(err);
@@ -58,7 +57,7 @@ export const updateAnnounce = (req, res) => {
 
   jwt.verify(token, "secretkey", (err, userInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
-    const query = "SELECT iduser FROM announces WHERE idannounces = ?";
+    const query = "SELECT idusers FROM announces WHERE idannounces = ?";
     db.query(query, req.params.id, (err, data) => {
       if (err) {
         return res.status(500).json(err);
@@ -69,12 +68,11 @@ export const updateAnnounce = (req, res) => {
     const values = [
       req.body.title,
       req.body.price,
-      req.body.rating,
       req.body.description,
       req.params.id,
     ];
     const q =
-      "UPDATE announces SET title = ?, price = ?, rating = ?, description = ? WHERE idannounces = ?";
+      "UPDATE announces SET title = ?, price = ?, description = ? WHERE idannounces = ?";
     db.query(q, values, (err, data) => {
       if (err) {
         return res.status(500).json(err);
@@ -91,16 +89,16 @@ export const deleteAnnounce = (req, res) => {
 
   jwt.verify(token, "secretkey", (err, userInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
-    const query = "SELECT iduser FROM announces WHERE idannounces = ?";
+    const query = "SELECT idusers FROM announces WHERE idannounces = ?";
     db.query(query, req.params.id, (err, data) => {
       if (err) {
         return res.status(500).json(err);
-      } else if (data[0].iduser !== userInfo.id) {
+      } else if (data[0].idusers !== userInfo.id) {
         return res.status(403).json("You are not the owner of this announce");
       }
     });
     const id = req.params.id;
-    const q = "DELETE FROM announces WHERE idannounces = ? and iduser = ?";
+    const q = "DELETE FROM announces WHERE idannounces = ?";
     db.query(q, [id, userInfo.id], (err, data) => {
       if (err) {
         return res.status(500).json(err);

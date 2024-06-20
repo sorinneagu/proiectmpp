@@ -1,0 +1,51 @@
+.navbar {
+  background-color: navy;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+  gap: 2rem;
+  padding: 0 1rem;
+}
+.site-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+.navbar a {
+  color: white;
+  text-decoration: none;
+  padding: 10px;
+  cursor: pointer;
+}
+.navbar div {
+  color: white;
+  text-decoration: none;
+  padding: 10px;
+}
+.navbar ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+.login_button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  height: auto;
+  color: #fff;
+  background: rgb(0, 60, 180);
+  border-radius: 50px;
+  font-size: 19px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.userphoto {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
