@@ -19,13 +19,24 @@ function AnnounceView() {
   const [announce, setAnnounce] = useState([]);
   const [reviews, setReviews] = useState([]);
   console.log(currentUser);
+  const handleAddReview = () => {
+    navigate("/review");
+  };
+  const handleEdit = () => {
+    navigate("/announce/edit/" + id);
+  };
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(
-        "http://localhost:5000/api/announces/" + id
-      );
+      if (window.confirm("Are you sure you want to delete this review?")) {
+        const response = await axios.delete(
+          "http://localhost:5000/api/announces/" + id,
+          {
+            withCredentials: true,
+          }
+        );
 
-      navigate("/");
+        navigate("/");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -58,7 +69,7 @@ function AnnounceView() {
       }
     };
     fetchReviews();
-  }, [id]);
+  }, []);
 
   return (
     <>
@@ -100,12 +111,25 @@ function AnnounceView() {
             </Box>
           </div>
           <div className="announceview-price">10 $</div>
-          <div className="announceview-buttons">
-            <button className="announceview-button" onClick={handleDelete}>
-              Delete
+          {currentUser && currentUser.idusers === announce.idusers ? (
+            <div className="announceview-buttons">
+              <button className="announceview-button" onClick={handleDelete}>
+                Delete
+              </button>
+              <button className="announceview-button" onClick={handleEdit}>
+                Edit
+              </button>
+            </div>
+          ) : (
+            <></>
+          )}
+          {currentUser ? (
+            <button className="announceview-button" onClick={handleAddReview}>
+              Add Review
             </button>
-            <button className="announceview-button">Edit</button>
-          </div>
+          ) : (
+            <></>
+          )}
         </div>
         <div className="announceview-ratings">
           <ul>

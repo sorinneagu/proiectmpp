@@ -61,7 +61,7 @@ export const updateAnnounce = (req, res) => {
     db.query(query, req.params.id, (err, data) => {
       if (err) {
         return res.status(500).json(err);
-      } else if (data[0].iduser !== userInfo.id) {
+      } else if (data[0].idusers !== userInfo.id) {
         return res.status(403).json("You are not the owner of this announce");
       }
     });

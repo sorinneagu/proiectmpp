@@ -4,6 +4,8 @@ import Login from "./pages/login_register/login.js";
 import Register from "./pages/login_register/register.js";
 import NewCard from "./pages/newcard/newcard.js";
 import Review from "./components/review/review.js";
+import EditCard from "./pages/editannounce/editannounce.js";
+import AddReview from "./pages/review/review.js";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AnnounceView from "./pages/announceview/announceview.js";
 
@@ -18,6 +20,8 @@ function App() {
           <Route path="/add" element={<NewCard></NewCard>} />
           <Route path="/review" element={<Review></Review>} />
           <Route path="/announce/:id" element={<AnnounceView></AnnounceView>} />
+          <Route path="/announce/edit/:id" element={<EditCard></EditCard>} />
+          <Route path="/review" element={<AddReview></AddReview>} />
         </Routes>
       </BrowserRouter>
     </div>

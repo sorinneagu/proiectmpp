@@ -46,15 +46,15 @@ export const deleteReview = (req, res) => {
   jwt.verify(token, "secretkey", (err, userInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
-    const query = "SELECT iduser FROM reviews WHERE idreviews = ?";
+    const query = "SELECT idusers FROM reviews WHERE idreviews = ?";
     db.query(query, req.params.id, (err, data) => {
       if (err) {
         return res.status(500).json(err);
-      } else if (data[0].iduser !== userInfo.id) {
+      } else if (data[0].idusers !== userInfo.id) {
         return res.status(403).json("You are not the owner of this announce");
       } else {
         const reviewID = req.params.id;
-        const q = "DELETE FROM reviews WHERE idreviews = ? AND iduser = ?";
+        const q = "DELETE FROM reviews WHERE idreviews = ? AND idusers = ?";
         db.query(q, [reviewID, userInfo.id], (err, data) => {
           if (err) {
             return res.status(500).json(err);

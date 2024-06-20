@@ -7,8 +7,19 @@ import axios from "axios";
 
 const Review = ({ idannounce }) => {
   const { currentUser } = useContext(AuthContext);
-  const handleDelete = () => {
-    console.log("Delete");
+  const handleDelete = async () => {
+    if (window.confirm("Are you sure you want to delete this review?")) {
+      await axios
+        .delete("http://localhost:5000/api/reviews/" + review.idreviews, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   const [review, setReview] = useState([]);
@@ -19,6 +30,7 @@ const Review = ({ idannounce }) => {
           "http://localhost:5000/api/reviews?idannounce=" + idannounce
         );
         setReview(response.data[0]);
+        console.log(review.idreviews);
       } catch (error) {
         console.log(error);
       }
@@ -69,13 +81,17 @@ const Review = ({ idannounce }) => {
                     </Box>
                   </Box>
                 </div>
-                <div className="review-footer">
-                  <button className="review-button">Edit</button>
-                  <button className="review-button">Update</button>
-                  <button className="review-button" onClick={handleDelete}>
-                    Delete
-                  </button>
-                </div>
+                {currentUser && currentUser.idusers === review.idusers ? (
+                  <div className="review-footer">
+                    <button className="review-button">Edit</button>
+                    <button className="review-button">Update</button>
+                    <button className="review-button" onClick={handleDelete}>
+                      Delete
+                    </button>
+                  </div>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
           </div>
