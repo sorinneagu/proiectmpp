@@ -20,7 +20,7 @@ function AnnounceView() {
   const [reviews, setReviews] = useState([]);
   console.log(currentUser);
   const handleAddReview = () => {
-    navigate("/review");
+    navigate("/announce/" + id + "/review");
   };
   const handleEdit = () => {
     navigate("/announce/edit/" + id);
@@ -41,7 +41,7 @@ function AnnounceView() {
       console.log(error);
     }
   };
-
+  console.log(reviews.length);
   useEffect(() => {
     const fetchAnnounce = async (e) => {
       try {
@@ -134,11 +134,14 @@ function AnnounceView() {
         <div className="announceview-ratings">
           <ul>
             <li className="list">
-              {reviews.map((review) => (
-                <div key={review.idreviews}>
-                  <Review idannounce={review.idannounces} />
-                </div>
-              ))}
+              {reviews &&
+                Array.from({ length: reviews.length }).map((_, index) => (
+                  <Review
+                    review={reviews[index].idreviews}
+                    key={reviews[index].idreviews}
+                  console.log(reviews[index].idreviews}
+                  />
+                ))}
             </li>
           </ul>
         </div>

@@ -58,7 +58,7 @@ const Review = ({ idannounce }) => {
                       width: 200,
                       display: "flex",
                       alignItems: "center",
-                      justifyItems: "center", // Add this line to align content in center
+                      justifyItems: "center",
                     }}
                   >
                     <Rating
@@ -97,7 +97,7 @@ const Review = ({ idannounce }) => {
           </div>
         </div>
       ) : (
-        <div></div> // Add this line to return empty div
+        <div></div>
       )}
     </>
   );

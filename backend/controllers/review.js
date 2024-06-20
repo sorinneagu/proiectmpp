@@ -24,11 +24,11 @@ export const createReview = (req, res) => {
     const values = [
       req.body.rating,
       req.body.review,
-      req.body.idannounce,
+      req.body.idannounces,
       userInfo.id, // get the user id from the user that is currently logged in
     ];
     const q =
-      "INSERT INTO reviews(rating, review, idannounces, iduser) VALUES (?)";
+      "INSERT INTO reviews(rating, review, idannounces, idusers) VALUES (?)";
     db.query(q, [values], (err, data) => {
       if (err) {
         return res.status(500).json(err);

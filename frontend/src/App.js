@@ -21,7 +21,10 @@ function App() {
           <Route path="/review" element={<Review></Review>} />
           <Route path="/announce/:id" element={<AnnounceView></AnnounceView>} />
           <Route path="/announce/edit/:id" element={<EditCard></EditCard>} />
-          <Route path="/review" element={<AddReview></AddReview>} />
+          <Route
+            path="/announce/:id/review"
+            element={<AddReview></AddReview>}
+          />
         </Routes>
       </BrowserRouter>
     </div>
