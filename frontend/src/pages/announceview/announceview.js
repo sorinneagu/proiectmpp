@@ -16,7 +16,7 @@ function AnnounceView() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { currentUser } = useContext(AuthContext);
-  const [announce, setAnnounce] = useState([]);
+  const [announce, setAnnounce] = useState(null);
   const [reviews, setReviews] = useState([]);
   const handleAddReview = () => {
     navigate("/announce/" + id + "/review");
@@ -43,13 +43,17 @@ function AnnounceView() {
         const response = await axios.get(
           "http://localhost:5000/api/announces/" + id
         );
+        if (response.data.length === 0) {
+          navigate("/notfound");
+        }
         setAnnounce(response.data[0]);
       } catch (error) {
         console.log(error);
       }
     };
     fetchAnnounce();
-  }, [id]);
+  }, [id, navigate]);
+
   const fetchReviews = useCallback(async () => {
     try {
       const response = await axios.get(
@@ -67,76 +71,82 @@ function AnnounceView() {
   return (
     <>
       <Navbar />
-      <div className="announceview">
-        <div className="annnounceview-header">
-          <img className="announceview-image" src={announce.images} alt="" />
-        </div>
-        <div className="announceview-content">
-          <div className="announceview-title">{announce.title}</div>
-          <div className="announceview-description">{announce.description}</div>
-          <div className="annouceview-rating">
-            <Box
-              sx={{
-                width: 200,
-                display: "flex",
-                alignItems: "center",
-                justifyItems: "center",
-              }}
-            >
-              <Rating
-                className="cart-item-rating"
-                name="read-only"
-                value={parseFloat(announce.rating)}
-                precision={0.1}
-                readOnly
-                size="large"
-              />
+      {!announce ? (
+        <>Loading...</>
+      ) : (
+        <div className="announceview">
+          <div className="annnounceview-header">
+            <img className="announceview-image" src={announce.images} alt="" />
+          </div>
+          <div className="announceview-content">
+            <div className="announceview-title">{announce.title}</div>
+            <div className="announceview-description">
+              {announce.description}
+            </div>
+            <div className="annouceview-rating">
               <Box
                 sx={{
-                  m1: 2,
-                  fontSize: 24,
-                  marginLeft: 1,
-                  userSelect: "none",
+                  width: 200,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyItems: "center",
                 }}
               >
-                <p className="rating-number">{announce.rating}</p>
+                <Rating
+                  className="cart-item-rating"
+                  name="read-only"
+                  value={parseFloat(announce.rating)}
+                  precision={0.1}
+                  readOnly
+                  size="large"
+                />
+                <Box
+                  sx={{
+                    m1: 2,
+                    fontSize: 24,
+                    marginLeft: 1,
+                    userSelect: "none",
+                  }}
+                >
+                  <p className="rating-number">{announce.rating}</p>
+                </Box>
               </Box>
-            </Box>
-          </div>
-          <div className="announceview-price">10 $</div>
-          <div className="announceview-postedby">
-            <div className="postedby">Posted by: {announce.username}</div>
-          </div>
-          {currentUser && currentUser.idusers === announce.idusers ? (
-            <div className="announceview-buttons">
-              <button className="announceview-button" onClick={handleDelete}>
-                Delete
-              </button>
-              <button className="announceview-button" onClick={handleEdit}>
-                Edit
-              </button>
             </div>
-          ) : (
-            <></>
-          )}
-          {currentUser ? (
-            <button className="announceview-button" onClick={handleAddReview}>
-              Add Review
-            </button>
-          ) : (
-            <></>
-          )}
+            <div className="announceview-price">10 $</div>
+            <div className="announceview-postedby">
+              <div className="postedby">Posted by: {announce.username}</div>
+            </div>
+            {currentUser && currentUser.idusers === announce.idusers ? (
+              <div className="announceview-buttons">
+                <button className="announceview-button" onClick={handleDelete}>
+                  Delete
+                </button>
+                <button className="announceview-button" onClick={handleEdit}>
+                  Edit
+                </button>
+              </div>
+            ) : (
+              <></>
+            )}
+            {currentUser ? (
+              <button className="announceview-button" onClick={handleAddReview}>
+                Add Review
+              </button>
+            ) : (
+              <></>
+            )}
+          </div>
+          <div className="announceview-ratings">
+            <ul>
+              {reviews.map((review) => (
+                <li className="list" key={review.idreviews}>
+                  <Review review={review} fetchReviews={fetchReviews} />
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-        <div className="announceview-ratings">
-          <ul>
-            {reviews.map((review) => (
-              <li className="list" key={review.idreviews}>
-                <Review review={review} fetchReviews={fetchReviews} />
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+      )}
     </>
   );
 }

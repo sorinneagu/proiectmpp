@@ -7,6 +7,7 @@ import Review from "./components/review/review.js";
 import EditCard from "./pages/editannounce/editannounce.js";
 import AddReview from "./pages/review/review.js";
 import EditReview from "./pages/editreview/editreview.js";
+import NotFound from "./pages/notfound/notfound.js";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AnnounceView from "./pages/announceview/announceview.js";
 
@@ -30,6 +31,7 @@ function App() {
             path="announce/:idannounce/review/edit/:id"
             element={<EditReview></EditReview>}
           />
+          <Route path="*" element={<NotFound></NotFound>} />
         </Routes>
       </BrowserRouter>
     </div>
