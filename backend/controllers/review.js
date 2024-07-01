@@ -38,6 +38,38 @@ export const createReview = (req, res) => {
     });
   });
 };
+export const updateReview = (req, res) => {
+  const token = req.cookies.accessToken;
+  if (!token) return res.status(401).json("Not authenticated!");
+
+  jwt.verify(token, "secretkey", (err, userInfo) => {
+    if (err) return res.status(403).json("Token is not valid!");
+
+    const query = "SELECT idusers FROM reviews WHERE idreviews = ?";
+    db.query(query, req.params.id, (err, data) => {
+      if (err) {
+        return res.status(500).json(err);
+      } else if (data[0].idusers !== userInfo.id) {
+        return res.status(403).json("You are not the owner of this announce");
+      } else {
+        const reviewID = req.params.id;
+        const q =
+          "UPDATE reviews SET review = ? , rating = ? WHERE idreviews = ? AND idusers = ?";
+        db.query(
+          q,
+          [req.body.review, req.body.rating, reviewID, userInfo.id],
+          (err, data) => {
+            if (err) {
+              return res.status(500).json(err);
+            } else {
+              return res.status(200).json("Review updated");
+            }
+          }
+        );
+      }
+    });
+  });
+};
 
 export const deleteReview = (req, res) => {
   const token = req.cookies.accessToken;

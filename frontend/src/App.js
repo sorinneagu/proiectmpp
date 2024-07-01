@@ -6,6 +6,7 @@ import NewCard from "./pages/newcard/newcard.js";
 import Review from "./components/review/review.js";
 import EditCard from "./pages/editannounce/editannounce.js";
 import AddReview from "./pages/review/review.js";
+import EditReview from "./pages/editreview/editreview.js";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AnnounceView from "./pages/announceview/announceview.js";
 
@@ -24,6 +25,10 @@ function App() {
           <Route
             path="/announce/:id/review"
             element={<AddReview></AddReview>}
+          />
+          <Route
+            path="announce/:idannounce/review/edit/:id"
+            element={<EditReview></EditReview>}
           />
         </Routes>
       </BrowserRouter>

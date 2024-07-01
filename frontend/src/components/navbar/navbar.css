@@ -11,8 +11,10 @@
 .site-title {
   font-size: 2rem;
   font-weight: bold;
+  background: none;
+  border: none;
 }
-.navbar a {
+.navbar button {
   color: white;
   text-decoration: none;
   padding: 10px;

@@ -9,16 +9,15 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
 import { useContext } from "react";
 import { useParams } from "react-router-dom";
+import { useCallback } from "react";
 import axios from "axios";
 
 function AnnounceView() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { currentUser } = useContext(AuthContext);
-  console.log(currentUser);
   const [announce, setAnnounce] = useState([]);
   const [reviews, setReviews] = useState([]);
-  console.log(currentUser);
   const handleAddReview = () => {
     navigate("/announce/" + id + "/review");
   };
@@ -28,12 +27,9 @@ function AnnounceView() {
   const handleDelete = async () => {
     try {
       if (window.confirm("Are you sure you want to delete this review?")) {
-        const response = await axios.delete(
-          "http://localhost:5000/api/announces/" + id,
-          {
-            withCredentials: true,
-          }
-        );
+        await axios.delete("http://localhost:5000/api/announces/" + id, {
+          withCredentials: true,
+        });
 
         navigate("/");
       }
@@ -41,11 +37,9 @@ function AnnounceView() {
       console.log(error);
     }
   };
-  console.log(reviews.length);
   useEffect(() => {
     const fetchAnnounce = async (e) => {
       try {
-        // e.preventDefault();
         const response = await axios.get(
           "http://localhost:5000/api/announces/" + id
         );
@@ -55,21 +49,20 @@ function AnnounceView() {
       }
     };
     fetchAnnounce();
-  }, []);
+  }, [id]);
+  const fetchReviews = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/reviews?idannounce=${id}`
+      );
+      setReviews(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [id]);
   useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/api/reviews?idannounce=${id}`
-        );
-        setReviews(response.data);
-        console.log(reviews[0].idreviews);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     fetchReviews();
-  }, []);
+  }, [fetchReviews]);
 
   return (
     <>
@@ -81,19 +74,19 @@ function AnnounceView() {
         <div className="announceview-content">
           <div className="announceview-title">{announce.title}</div>
           <div className="announceview-description">{announce.description}</div>
-          <div classname="annouceview-rating">
+          <div className="annouceview-rating">
             <Box
               sx={{
                 width: 200,
                 display: "flex",
                 alignItems: "center",
-                justifyItems: "center", // Add this line to align content in center
+                justifyItems: "center",
               }}
             >
               <Rating
                 className="cart-item-rating"
                 name="read-only"
-                value={announce.rating}
+                value={parseFloat(announce.rating)}
                 precision={0.1}
                 readOnly
                 size="large"
@@ -111,6 +104,9 @@ function AnnounceView() {
             </Box>
           </div>
           <div className="announceview-price">10 $</div>
+          <div className="announceview-postedby">
+            <div className="postedby">Posted by: {announce.username}</div>
+          </div>
           {currentUser && currentUser.idusers === announce.idusers ? (
             <div className="announceview-buttons">
               <button className="announceview-button" onClick={handleDelete}>
@@ -133,16 +129,11 @@ function AnnounceView() {
         </div>
         <div className="announceview-ratings">
           <ul>
-            <li className="list">
-              {reviews &&
-                Array.from({ length: reviews.length }).map((_, index) => (
-                  <Review
-                    review={reviews[index].idreviews}
-                    key={reviews[index].idreviews}
-                  console.log(reviews[index].idreviews}
-                  />
-                ))}
-            </li>
+            {reviews.map((review) => (
+              <li className="list" key={review.idreviews}>
+                <Review review={review} fetchReviews={fetchReviews} />
+              </li>
+            ))}
           </ul>
         </div>
       </div>

@@ -15,7 +15,9 @@ export const getAnnounces = (req, res) => {
 
 export const getAnnounce = (req, res) => {
   const id = req.params.id;
-  const q = "SELECT * FROM announces WHERE idannounces = ?";
+  //const q = "SELECT * FROM announces WHERE idannounces = ?";
+  const q =
+    "SELECT announces.*, users.username FROM ANNOUNCES JOIN users ON announces.idusers = users.idusers WHERE idannounces = ?";
   db.query(q, id, (err, data) => {
     if (err) {
       return res.status(500).json(err);

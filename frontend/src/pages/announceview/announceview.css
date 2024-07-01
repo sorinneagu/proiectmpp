@@ -67,8 +67,9 @@
   display: flex;
   flex-direction: column;
   gap: 9px;
-  width: 80%;
+  width: 100%;
   margin-top: 10px;
+  align-items: center;
 }
 .list {
   display: flex;
@@ -77,6 +78,7 @@
   width: 100%;
   margin-top: 10px;
   justify-content: center;
+  align-items: center;
 }
 .announceview-button {
   display: flex;

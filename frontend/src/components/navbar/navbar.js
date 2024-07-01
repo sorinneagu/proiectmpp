@@ -10,9 +10,9 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <a className="site-title" onClick={() => navigate("/")}>
+      <button className="site-title" onClick={() => navigate("/")}>
         Numerandom
-      </a>
+      </button>
       <ul>
         {currentUser ? (
           <>
