@@ -2,7 +2,6 @@ import { db } from "../connect.js";
 import jwt from "jsonwebtoken";
 
 export const getReviews = (req, res) => {
-  // const q = "SELECT * FROM reviews WHERE idannounces = ?";
   const q =
     "SELECT reviews.*, users.username, users.userphoto FROM reviews INNER JOIN users ON reviews.idusers = users.idusers WHERE reviews.idannounces = ?";
   db.query(q, [req.query.idannounce], (err, data) => {
@@ -19,7 +18,7 @@ export const createReview = (req, res) => {
   const token = req.cookies.accessToken;
   if (!token) return res.status(401).json("Not logged in!");
 
-  jwt.verify(token, "secretkey", (err, userInfo) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, userInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
     const values = [
       req.body.rating,
@@ -42,15 +41,17 @@ export const updateReview = (req, res) => {
   const token = req.cookies.accessToken;
   if (!token) return res.status(401).json("Not authenticated!");
 
-  jwt.verify(token, "secretkey", (err, userInfo) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, userInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
     const query = "SELECT idusers FROM reviews WHERE idreviews = ?";
     db.query(query, req.params.id, (err, data) => {
       if (err) {
         return res.status(500).json(err);
+      } else if (data.length === 0) {
+        return res.status(404).json("Review not found");
       } else if (data[0].idusers !== userInfo.id) {
-        return res.status(403).json("You are not the owner of this announce");
+        return res.status(403).json("You are not the owner of this review");
       } else {
         const reviewID = req.params.id;
         const q =
@@ -70,12 +71,11 @@ export const updateReview = (req, res) => {
     });
   });
 };
-
 export const deleteReview = (req, res) => {
   const token = req.cookies.accessToken;
   if (!token) return res.status(401).json("Not authenticated!");
 
-  jwt.verify(token, "secretkey", (err, userInfo) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, userInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
     const query = "SELECT idusers FROM reviews WHERE idreviews = ?";
@@ -83,7 +83,7 @@ export const deleteReview = (req, res) => {
       if (err) {
         return res.status(500).json(err);
       } else if (data[0].idusers !== userInfo.id) {
-        return res.status(403).json("You are not the owner of this announce");
+        return res.status(403).json("You are not the owner of this review");
       } else {
         const reviewID = req.params.id;
         const q = "DELETE FROM reviews WHERE idreviews = ? AND idusers = ?";

@@ -46,7 +46,7 @@ function EditAnnounce() {
 
   return (
     <>
-      {currentUser === null ? (
+      {currentUser === null && currentUser.iduser ? (
         <>
           <Navbar />
           <h1>Not Authorised!</h1>
