@@ -20,10 +20,11 @@ const Card = () => {
         console.log(error);
       }
     };
+
     fetchAllCards();
   }, []);
   return (
-    <div className="card">
+    <div className="card" data-testid="card-component">
       {card.map((announce) => (
         <div
           key={announce.idannounces}

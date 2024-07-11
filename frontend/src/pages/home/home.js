@@ -9,7 +9,6 @@ function Home() {
     e.preventDefault();
     navigate("/add");
   };
-
   return (
     <div className="home">
       <Navbar />

@@ -32,6 +32,6 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 
-app.listen(process.env.SERVER_PORT, () => {
+app.listen(process.env.SERVER_PORT || 5000, () => {
   console.log(`Server running on port ${process.env.SERVER_PORT}`);
 });

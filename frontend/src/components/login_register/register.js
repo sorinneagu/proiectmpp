@@ -29,7 +29,11 @@ const RegisterForm = () => {
         navigate("/login");
       }
     } catch (err) {
-      setErr(err.response.data);
+      const errorMessage =
+        err.response && err.response.data
+          ? err.response.data
+          : "An unexpected error occurred";
+      setErr(errorMessage);
     }
   };
   return (

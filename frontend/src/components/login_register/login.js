@@ -26,7 +26,11 @@ const LoginForm = () => {
         navigate("/");
       }
     } catch (err) {
-      setErr(err.response.data);
+      const errorMessage =
+        err.response && err.response.data
+          ? err.response.data
+          : "An unexpected error occurred";
+      setErr(errorMessage);
     }
   };
   return (
@@ -53,12 +57,20 @@ const LoginForm = () => {
           />
         </div>
       </div>
-      {err && <div className="error">{err}</div>}
+      {err && (
+        <div className="error" data-testid="error">
+          {err}
+        </div>
+      )}
       <div className="submit-container">
         <div className={"submit gray"} onClick={() => navigate("/register")}>
           Sing Up
         </div>
-        <div className={"submit"} onClick={handleLogin}>
+        <div
+          className={"submit"}
+          data-testid="login-button"
+          onClick={handleLogin}
+        >
           Log In
         </div>
       </div>
